@@ -1,6 +1,7 @@
 package fr.insee.rmes.onion.application.handler;
 
 import fr.insee.rmes.onion.domain.exceptions.GenericInternalServerException;
+import fr.insee.rmes.onion.domain.exceptions.colectica.ColecticaRepositoryException;
 import fr.insee.rmes.onion.domain.exceptions.operations.NotFoundAttributeException;
 import fr.insee.rmes.onion.domain.exceptions.operations.OperationDocumentationRubricWithoutRangeException;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,10 @@ public class DomainExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ OperationDocumentationRubricWithoutRangeException.class })
     public final ResponseEntity<String> operationDocumentationRubricWithoutRangeException(OperationDocumentationRubricWithoutRangeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("At least one attribute don't have range " + exception.getId());
+    }
+
+    @ExceptionHandler({ ColecticaRepositoryException.class })
+    public final ResponseEntity<String> colecticaRepositoryException(ColecticaRepositoryException exception) {
+        return ResponseEntity.status(exception.getStatus()).body(exception.getDetails());
     }
 }
